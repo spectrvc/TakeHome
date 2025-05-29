@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Game Of Thrones</string>
     <string name="title_home">Characters</string>
+    <string name="characters_title_culture">Culture:</string>
+    <string name="characters_title_born">Born:</string>
+    <string name="characters_title_died">Died:</string>
+    <string name="characters_title_seasons">Seasons:</string>
+    <string name="characters_title_search">Search</string>
 </resources>
