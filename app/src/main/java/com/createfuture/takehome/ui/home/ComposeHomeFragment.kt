@@ -7,8 +7,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.createfuture.takehome.models.ApiCharacter
+import com.createfuture.data.ApiCharacter
+import com.createfuture.takehome.ui.factory.ComposeHomeViewModelFactory
+import com.createfuture.takehome.ui.home.screen.ComposeHomeScreen
+import com.createfuture.takehome.ui.home.screen.ComposeHomeViewModel
 import com.createfuture.takehome.ui.theme.Typography
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
@@ -20,6 +24,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 class ComposeHomeFragment : Fragment() {
+    private lateinit var viewModel: ComposeHomeViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,10 +40,14 @@ class ComposeHomeFragment : Fragment() {
             val _characters = service.getCharacters("Bearer 754t!si@glcE2qmOFEcN")
             charactersBody.value = _characters.body()!!
         }
+        viewModel = ViewModelProvider(
+            requireActivity(),
+            ComposeHomeViewModelFactory()
+        )[ComposeHomeViewModel::class.java]
         setContent {
             MaterialTheme(
                 typography = Typography,
-                content = { ComposeHomeScreen(charactersBody.value) }
+                content = { ComposeHomeScreen(viewModel, charactersBody.value) }
             )
         }
     }
