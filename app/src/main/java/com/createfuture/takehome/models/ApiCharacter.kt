@@ -6,7 +6,7 @@ data class ApiCharacter(
     val culture: String,
     val born: String,
     val died: String,
-    val aliases: List<Int>,
+    val aliases: List<String>,
     val tvSeries: List<String>,
     val playedBy: List<String>,
 )
