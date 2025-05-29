@@ -1,4 +1,4 @@
-package com.createfuture.takehome.ui.home
+package com.createfuture.takehome.ui.home.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,11 +23,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.createfuture.takehome.R
-import com.createfuture.takehome.models.ApiCharacter
+import com.createfuture.data.ApiCharacter
 import com.createfuture.takehome.ui.base.EditTextField
 
 @Composable
 fun ComposeHomeScreen(
+    viewModel: ComposeHomeViewModel,
     characterList: List<ApiCharacter>?,
 ) {
     Column(
