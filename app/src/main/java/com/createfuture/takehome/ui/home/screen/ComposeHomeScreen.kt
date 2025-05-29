@@ -14,6 +14,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -22,15 +24,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.createfuture.domain.CharacterDto
 import com.createfuture.takehome.R
-import com.createfuture.data.ApiCharacter
 import com.createfuture.takehome.ui.base.EditTextField
+import com.createfuture.takehome.ui.base.Indicator
 
 @Composable
 fun ComposeHomeScreen(
     viewModel: ComposeHomeViewModel,
-    characterList: List<ApiCharacter>?,
 ) {
+    val state by viewModel.uiState.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,27 +46,37 @@ fun ComposeHomeScreen(
     ) {
         EditTextField(
             label = stringResource(R.string.characters_title_search),
-            text = "",
-            onTextChange = { }
+            text = state.searchString,
+            onTextChange = { text ->
+                viewModel.setEvent(ComposeHomeEvent.OnChangeSearchString(text))
+            }
         )
         Spacer(modifier = Modifier.height(8.dp))
-        if (characterList != null)
-            CharacterList(characterList)
+        Indicator(state.indicatorVisibility)
+        if (state.errorString.isEmpty()) {
+            CharacterList(viewModel)
+        } else {
+            Text(
+                text = state.errorString,
+                style = MaterialTheme.typography.titleSmall,
+            )
+        }
     }
 
 }
 
 @Composable
-fun CharacterList(characterList: List<ApiCharacter>) {
+fun CharacterList(viewModel: ComposeHomeViewModel) {
+    val state by viewModel.uiState.collectAsState()
     LazyColumn {
-        items(characterList) { characterDto ->
+        items(state.characterList) { characterDto ->
             CharacterRow(characterDto)
         }
     }
 }
 
 @Composable
-fun CharacterRow(character: ApiCharacter) {
+fun CharacterRow(character: CharacterDto) {
     Row(
         modifier = Modifier.padding(vertical = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
